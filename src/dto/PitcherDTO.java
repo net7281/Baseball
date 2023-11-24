@@ -43,4 +43,17 @@ public class PitcherDTO extends HumanDTO{
 	public String toString() {
 		return super.toString() + "-" + position + "-" + win + "-" + lose + "-" + defence;
 	}
+	
+	public String toSelect() {
+		String str = "";
+		str += "번호 : " + super.getNumber() + "\n";
+		str += "이름 : " + super.getName() + "\n";
+		str += "나이 : " + super.getAge() + "\n";
+		str += "키 : " + super.getHeight() + "\n";
+		str += "포지션 : " + position + "\n";
+		str += "승리횟수 : " + win + "\n";
+		str += "패배횟수 : " + lose + "\n";
+		str += "방어율 : " + defence + "\n";
+		return str;
+	}
 }

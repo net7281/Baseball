@@ -28,68 +28,97 @@ public class BaseballDAO implements BaseballDAOImpl{
 
 	@Override
 	public void insert() { //선수정보입력
+		if(count < 10) {
+			System.out.println();
+			System.out.println("선수정보 입력 ==========");
+			System.out.println();
+			
+			int number;
+			String name;
+			int age;
+			double height;
+			int posNum = 0;
+			
+			try {
+				System.out.print("번호 >> ");
+				number = scanner.nextInt();
+				if(number == 0) {
+					System.out.println("0번은 사용하실 수 없습니다.");
+				}
+				int index = searchNum(number, humanDTOs);
+				if(index != -1) {
+					System.out.println(number + "는 이미 존재하는 번호입니다. 메뉴를 다시 선택해주세요.");
+					return;
+				}
+				System.out.print("이름 >> ");
+				name = scanner.next();
+				System.out.print("나이 >> ");
+				age = scanner.nextInt();
+				System.out.print("신장 >> ");
+				height = scanner.nextDouble();
+				
+				System.out.print("선수가 투수이면 1, 타자이면 2 를 입력해주세요 >> ");
+				posNum = scanner.nextInt();
+				
+				if(posNum == 1) {
+					String position = "투수";
+					int win;
+					int lose;
+					double defence;
+					
+					System.out.print("승리횟수 >> ");
+					win = scanner.nextInt();
+					System.out.print("패배횟수 >> ");
+					lose = scanner.nextInt();
+					System.out.print("방어율 >> ");
+					defence = scanner.nextDouble();
+					
+					humanDTOs[count] = new PitcherDTO(number, name, age, height, position, win, lose, defence);
+					
+				}else if(posNum == 2) {
+					String position = "타자";
+					int batcount;
+					int hit;
+					double hivAvg;
+					
+					System.out.print("타수 >> ");
+					batcount = scanner.nextInt();
+					System.out.print("안타 >> ");
+					hit = scanner.nextInt();
+					System.out.print("타율 >> ");
+					hivAvg = scanner.nextDouble();
+					
+					humanDTOs[count] = new BatterDTO(number, name, age, height, position, batcount, hit, hivAvg);
+					
+				}else {
+					System.out.println("잘못된 번호입니다. 메뉴를 다시 선택해주세요.");
+					return;
+				}
+				
+				count++;
+				
+			}catch (InputMismatchException e) {
+				System.out.println("잘못입력하셨습니다. 메뉴를 다시 선택해주세요.");
+				scanner.next();
+				return;
+			}
+		}else {
+			System.out.println("죄송합니다. 학생정보가 가득 찼습니다.");
+		}
+	}
+
+	@Override
+	public void delete() {
+		//이름을 입력받고 int는 0, String은 ""
+		
 		System.out.println();
-		System.out.println("선수정보 입력 ==========");
+		System.out.println("선수정보 삭제 ==========");
 		System.out.println();
 		
-		int number;
-		String name;
-		int age;
-		double height;
-		int posNum = 0;
-		
+		int number = 0;
 		try {
-			System.out.print("번호 >> ");
+			System.out.print("삭제하실 선수의 번호를 입력하세요 >> ");
 			number = scanner.nextInt();
-			int index = searchNum(number, humanDTOs);
-			if(index != -1) {
-				System.out.println(number + "는 이미 존재하는 번호입니다. 메뉴를 다시 선택해주세요.");
-				return;
-			}
-			System.out.print("이름 >> ");
-			name = scanner.next();
-			System.out.print("나이 >> ");
-			age = scanner.nextInt();
-			System.out.print("신장 >> ");
-			height = scanner.nextDouble();
-			
-			System.out.print("선수가 투수이면 1, 타자이면 2 를 입력해주세요 >> ");
-			posNum = scanner.nextInt();
-			
-			if(posNum == 1) {
-				String position = "투수";
-				int win;
-				int lose;
-				double defence;
-				
-				System.out.print("승리횟수 >> ");
-				win = scanner.nextInt();
-				System.out.print("패배횟수 >> ");
-				lose = scanner.nextInt();
-				System.out.print("방어율 >> ");
-				defence = scanner.nextDouble();
-				
-				humanDTOs[count] = new PitcherDTO(number, name, age, height, position, win, lose, defence);
-				
-			}else if(posNum == 2) {
-				String position = "타자";
-				int batcount;
-				int hit;
-				double hivAvg;
-				
-				System.out.print("타수 >> ");
-				batcount = scanner.nextInt();
-				System.out.print("안타 >> ");
-				hit = scanner.nextInt();
-				System.out.print("타율 >> ");
-				hivAvg = scanner.nextDouble();
-				
-				humanDTOs[count] = new BatterDTO(number, name, age, height, position, batcount, hit, hivAvg);
-				
-			}else {
-				System.out.println("잘못된 번호입니다. 메뉴를 다시 선택해주세요.");
-				return;
-			}
 			
 		}catch (InputMismatchException e) {
 			System.out.println("잘못입력하셨습니다. 메뉴를 다시 선택해주세요.");
@@ -97,17 +126,63 @@ public class BaseballDAO implements BaseballDAOImpl{
 			return;
 		}
 		
-	}
-
-	@Override
-	public void delete() {
-		// TODO Auto-generated method stub
+		int index = searchNum(number, humanDTOs);
+		if(index != -1) {
+			humanDTOs[index].setNumber(0);
+			humanDTOs[index].setName("");
+			humanDTOs[index].setAge(0);
+			humanDTOs[index].setHeight(0);
+			if(humanDTOs[index] instanceof PitcherDTO) {
+				PitcherDTO p = (PitcherDTO) humanDTOs[index];
+				p.setPosition("");
+				p.setWin(0);
+				p.setLose(0);
+				p.setDefence(0);
+			}else if(humanDTOs[index] instanceof BatterDTO){
+				BatterDTO b = (BatterDTO) humanDTOs[index];
+				b.setPosition("");
+				b.setBatcount(0);
+				b.setHit(0);
+				b.setHivAvg(0);
+			}
+			System.out.println(number + "번 선수의 정보를 삭제하였습니다.");
+			return;
+		}else {
+			System.out.println(number + "번 선수를 찾지 못했습니다.");
+			return;
+		}
 		
 	}
 
 	@Override
 	public void select() {
-		// TODO Auto-generated method stub
+		System.out.println();
+		System.out.println("선수정보 조회 ==========");
+		System.out.println();
+		
+		int number = 0;
+		try {
+			System.out.print("조회하실 선수의 번호를 입력하세요 >> ");
+			number = scanner.nextInt();
+			
+		}catch (InputMismatchException e) {
+			System.out.println("잘못입력하셨습니다. 메뉴를 다시 선택해주세요.");
+			scanner.next();
+			return;
+		}
+		
+		int index = searchNum(number, humanDTOs);
+		if(index != -1) {
+			if(humanDTOs[index] instanceof PitcherDTO) {
+				System.out.println(((PitcherDTO)humanDTOs[index]).toSelect());
+			}else if(humanDTOs[index] instanceof BatterDTO) {
+				System.out.println(((BatterDTO)humanDTOs[index]).toSelect());
+			}
+			return;
+		}else {
+			System.out.println(number + "번 선수를 찾지 못했습니다.");
+			return;
+		}
 		
 	}
 

@@ -44,4 +44,17 @@ public class BatterDTO extends HumanDTO{
 		return super.toString() + "-" + position + "-" + batcount + "-" + hit + "-" + hivAvg;
 	}
 	
+	public String toSelect() {
+		String str = "";
+		str += "번호 : " + super.getNumber() + "\n";
+		str += "이름 : " + super.getName() + "\n";
+		str += "나이 : " + super.getAge() + "\n";
+		str += "키 : " + super.getHeight() + "\n";
+		str += "포지션 : " + position + "\n";
+		str += "타수 : " + batcount + "\n";
+		str += "안타 : " + hit + "\n";
+		str += "타율 : " + hivAvg + "\n";
+		return str;
+	}
+	
 } 
