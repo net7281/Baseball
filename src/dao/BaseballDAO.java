@@ -127,7 +127,13 @@ public class BaseballDAO implements BaseballDAOImpl{
 
 	@Override
 	public void allData() {
-		
+		for(HumanDTO dto : humanDTOs) {
+			if(dto instanceof PitcherDTO) {
+				System.out.println(((PitcherDTO)dto).toString());
+			}else if(dto instanceof BatterDTO) {
+				System.out.println(((BatterDTO)dto).toString());
+			}
+		}
 	}
 
 	@Override
