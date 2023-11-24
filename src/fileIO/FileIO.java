@@ -39,7 +39,9 @@ public class FileIO {
 			PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
 			
 			for(String str : strArr) {
-				pw.println(str);
+				if(str!=null && !str.isBlank()) {
+					pw.println(str);
+				}
 			}
 			pw.close();
 			System.out.println("파일을 출력하였습니다.");
@@ -63,7 +65,9 @@ public class FileIO {
 			BufferedReader brForCount = new BufferedReader(new FileReader(file));
 			if(file.exists() && file.isFile() && file.canRead()) {
 				while ((str = brForCount.readLine()) != null) {
-					lineCount++;
+					if(str!="") {
+						lineCount++;						
+					}
 				}
 				brForCount.close();
 			}else {
@@ -75,8 +79,10 @@ public class FileIO {
 			BufferedReader br = new BufferedReader(new FileReader(file));
 			int i = 0;
 			while ((str = br.readLine()) != null) {
-				humanStrs[i] = str;
-				i++;
+				if(str!="") {
+					humanStrs[i] = str;
+					i++;
+				}
 			}
 			br.close();
 		} catch (Exception e) {

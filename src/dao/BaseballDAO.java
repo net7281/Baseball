@@ -279,11 +279,25 @@ public class BaseballDAO implements BaseballDAOImpl{
 	}
 
 	@Override
-	public void save() {
+	public void save() { //파일 저장
+		String strArr[] = new String[10];
+		
+		int strCount = 0;
+		for(int i = 0; i<humanDTOs.length; i++) {
+			if(humanDTOs[i] != null && humanDTOs[i].getNumber() != 0) {
+				if(humanDTOs[i] instanceof PitcherDTO) {
+					strArr[strCount] = ((PitcherDTO)humanDTOs[i]).toString();
+				}else if(humanDTOs[i] instanceof BatterDTO) {
+					strArr[strCount] = ((BatterDTO)humanDTOs[i]).toString();
+				}
+				strCount++;
+			}
+		}
+		fileIO.writeFile(strArr);
 	}
 
 	@Override
-	public void load() {
+	public void load() { //파일 불러오기
 		String strArr[] = fileIO.readFile();
 		
 		humanDTOs = null;
@@ -297,28 +311,36 @@ public class BaseballDAO implements BaseballDAOImpl{
 		for(int i = 0; i<strArr.length ;i++) {
 			String splitArr[] = strArr[i].split("-");
 			
-			int number = Integer.parseInt(splitArr[0]);
-			String name = splitArr[1];
-			int age = Integer.parseInt(splitArr[2]);
-			double height = Double.parseDouble(splitArr[3]);
-			
-			if(splitArr[4].equals("투수")) {
-				String position = splitArr[4];
-				int win = Integer.parseInt(splitArr[5]);
-				int lose = Integer.parseInt(splitArr[6]);
-				double defence = Double.parseDouble(splitArr[7]);
-				
-				humanDTOs[i] = new PitcherDTO(number, name, age, height, position, win, lose, defence);
-				
-			}else if(splitArr[4].equals("타자")) {
-				String position = splitArr[4];
-				int batcount = Integer.parseInt(splitArr[5]);
-				int hit = Integer.parseInt(splitArr[6]);
-				double hivAvg = Double.parseDouble(splitArr[7]);
-				
-				humanDTOs[i] = new BatterDTO(number, name, age, height, position, batcount, hit, hivAvg);
+			if(splitArr.length != 8) { //잘못된 입력 걸러내기
+				continue;
 			}
-			count++;
+			try {
+				int number = Integer.parseInt(splitArr[0]);
+				String name = splitArr[1];
+				int age = Integer.parseInt(splitArr[2]);
+				double height = Double.parseDouble(splitArr[3]);
+				
+				if(splitArr[4].equals("투수")) {
+					String position = splitArr[4];
+					int win = Integer.parseInt(splitArr[5]);
+					int lose = Integer.parseInt(splitArr[6]);
+					double defence = Double.parseDouble(splitArr[7]);
+					
+					humanDTOs[i] = new PitcherDTO(number, name, age, height, position, win, lose, defence);
+					
+				}else if(splitArr[4].equals("타자")) {
+					String position = splitArr[4];
+					int batcount = Integer.parseInt(splitArr[5]);
+					int hit = Integer.parseInt(splitArr[6]);
+					double hivAvg = Double.parseDouble(splitArr[7]);
+					
+					humanDTOs[i] = new BatterDTO(number, name, age, height, position, batcount, hit, hivAvg);
+				}
+				count++;
+			} catch (Exception e) {
+				continue;
+			}
+			
 		}
 	}
 	
