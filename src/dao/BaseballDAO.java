@@ -188,8 +188,71 @@ public class BaseballDAO implements BaseballDAOImpl{
 
 	@Override
 	public void update() {
-		// TODO Auto-generated method stub
+		System.out.println();
+		System.out.println("선수정보 수정 ==========");
+		System.out.println();
 		
+		int number = 0;
+		try {
+			System.out.print("수정하실 선수의 번호를 입력하세요 >> ");
+			number = scanner.nextInt();
+			
+		}catch (InputMismatchException e) {
+			System.out.println("잘못입력하셨습니다. 메뉴를 다시 선택해주세요.");
+			scanner.next();
+			return;
+		}
+		
+		int index = searchNum(number, humanDTOs);
+		if(index != -1) {
+			if(humanDTOs[index] instanceof PitcherDTO) {
+				int win;
+				int lose;
+				double defence;
+				try {
+					System.out.print("승리횟수 >> ");
+					win = scanner.nextInt();
+					System.out.print("패배횟수 >> ");
+					lose = scanner.nextInt();
+					System.out.print("방어율 >> ");
+					defence = scanner.nextDouble();
+				}catch (Exception e) {
+					System.out.println("잘못입력하셨습니다. 메뉴를 다시 선택해주세요.");
+					return;
+				}
+				PitcherDTO p = (PitcherDTO) humanDTOs[index];
+				p.setWin(win);
+				p.setLose(lose);
+				p.setDefence(defence);
+				
+			}else if(humanDTOs[index] instanceof BatterDTO) {
+				int batcount;
+				int hit;
+				double hivAvg;
+				try {
+					System.out.print("타수 >> ");
+					batcount = scanner.nextInt();
+					System.out.print("안타 >> ");
+					hit = scanner.nextInt();
+					System.out.print("타율 >> ");
+					hivAvg = scanner.nextDouble();
+				}catch (Exception e) {
+					System.out.println("잘못입력하셨습니다. 메뉴를 다시 선택해주세요.");
+					return;
+				}
+				BatterDTO b = (BatterDTO) humanDTOs[index];
+				b.setBatcount(batcount);
+				b.setHit(hit);
+				b.setHivAvg(hivAvg);
+			}
+			
+			System.out.println();
+			System.out.println(number + "번 선수의 정보를 수정하였습니다.");
+			return;
+		}else {
+			System.out.println(number + "번 선수를 찾지 못했습니다.");
+			return;
+		}
 	}
 
 	@Override
@@ -255,6 +318,7 @@ public class BaseballDAO implements BaseballDAOImpl{
 				
 				humanDTOs[i] = new BatterDTO(number, name, age, height, position, batcount, hit, hivAvg);
 			}
+			count++;
 		}
 	}
 	
