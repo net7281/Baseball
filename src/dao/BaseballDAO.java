@@ -256,15 +256,73 @@ public class BaseballDAO implements BaseballDAOImpl{
 	}
 
 	@Override
-	public void battingSort() {
-		// TODO Auto-generated method stub
+	public void battingSort() { //타율 순 정렬
+		System.out.println();
+		System.out.println("타율 순위 ==========");
+		System.out.println();
+		//타자 수 얻기
+		int batterCount = 0;
+		for(HumanDTO dto : humanDTOs) {
+			if(dto instanceof BatterDTO) {
+				batterCount++;
+			}
+		}
 		
+		//타자 arr
+		BatterDTO batterDTOs[] = new BatterDTO[batterCount];
+		int dtoCount = 0;
+		for(HumanDTO dto : humanDTOs) {
+			if(dto instanceof BatterDTO) {
+				batterDTOs[dtoCount] = (BatterDTO) dto;
+				dtoCount++;
+			}
+		}
+		
+		for(int i = 0; i<batterDTOs.length-1; i++) {
+			for(int j = i+1; j<batterDTOs.length; j++) {
+				if(batterDTOs[i].getHivAvg() < batterDTOs[j].getHivAvg()) {
+					swapFunc(i,j,batterDTOs);
+				}
+			}
+		}
+		for(BatterDTO dto : batterDTOs) {
+			System.out.println(dto.toString());
+		}
 	}
 
 	@Override
-	public void pitcherSort() {
-		// TODO Auto-generated method stub
+	public void pitcherSort() { // 방어율 순위 - 낮을수록 좋음
+		System.out.println();
+		System.out.println("방어율 순위 ==========");
+		System.out.println();
+		//타자 수 얻기
+		int pitcherCount = 0;
+		for(HumanDTO dto : humanDTOs) {
+			if(dto instanceof PitcherDTO) {
+				pitcherCount++;
+			}
+		}
 		
+		//타자 arr
+		PitcherDTO pitcherDTOs[] = new PitcherDTO[pitcherCount];
+		int dtoCount = 0;
+		for(HumanDTO dto : humanDTOs) {
+			if(dto instanceof PitcherDTO) {
+				pitcherDTOs[dtoCount] = (PitcherDTO) dto;
+				dtoCount++;
+			}
+		}
+		
+		for(int i = 0; i<pitcherDTOs.length-1; i++) {
+			for(int j = i+1; j<pitcherDTOs.length; j++) {
+				if(pitcherDTOs[i].getDefence() > pitcherDTOs[j].getDefence()) {
+					swapFunc(i,j,pitcherDTOs);
+				}
+			}
+		}
+		for(PitcherDTO dto : pitcherDTOs) {
+			System.out.println(dto.toString());
+		}
 	}
 
 	@Override
@@ -355,6 +413,14 @@ public class BaseballDAO implements BaseballDAOImpl{
 			}
 		}
 		return index;
+	}
+	
+	//스왑함수
+	private void swapFunc(int i, int j, Object objs[]) {
+		Object object;
+		object = objs[i];
+		objs[i] = objs[j];
+		objs[j] = object;
 	}
 
 }
