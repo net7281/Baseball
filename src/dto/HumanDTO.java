@@ -7,6 +7,12 @@ public class HumanDTO {
 	private int age;
 	private double height;
 	
+	public HumanDTO(int number, String name, int age, double height) {
+		this.number = number;
+		this.name = name;
+		this.age = age;
+		this.height = height;
+	}
 	
 	public int getNumber() {
 		return number;
@@ -31,6 +37,11 @@ public class HumanDTO {
 	}
 	public void setHeight(double height) {
 		this.height = height;
+	}
+
+	@Override
+	public String toString() {
+		return number + "-" + name + "-" + age + "-" + height;
 	}
 	
 	

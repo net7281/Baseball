@@ -5,6 +5,15 @@ public class PitcherDTO extends HumanDTO{
 	private int win;
 	private int lose;
 	private double defence;
+	
+	public PitcherDTO(int number, String name, int age, double height, String position, int win, int lose, double defence) {
+		super(number,name,age,height);
+		this.position = position;
+		this.win = win;
+		this.lose = lose;
+		this.defence = defence;
+	}
+	
 	public String getPosition() {
 		return position;
 	}
@@ -29,6 +38,9 @@ public class PitcherDTO extends HumanDTO{
 	public void setDefence(double defence) {
 		this.defence = defence;
 	}
-	
-	
+
+	@Override
+	public String toString() {
+		return super.toString() + "-" + position + "-" + win + "-" + lose + "-" + defence;
+	}
 }

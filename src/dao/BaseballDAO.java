@@ -3,7 +3,9 @@ package dao;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import dto.BatterDTO;
 import dto.HumanDTO;
+import dto.PitcherDTO;
 
 public class BaseballDAO implements BaseballDAOImpl{
 	
@@ -30,26 +32,66 @@ public class BaseballDAO implements BaseballDAOImpl{
 		String name;
 		int age;
 		double height;
+		int posNum = 0;
 		
 		try {
 			System.out.print("번호 >> ");
 			number = scanner.nextInt();
+			int index = searchNum(number, humanDTOs);
+			if(index != -1) {
+				System.out.println(number + "는 이미 존재하는 번호입니다. 메뉴를 다시 선택해주세요.");
+				return;
+			}
+			System.out.print("이름 >> ");
+			name = scanner.next();
+			System.out.print("나이 >> ");
+			age = scanner.nextInt();
+			System.out.print("신장 >> ");
+			height = scanner.nextDouble();
+			
+			System.out.print("선수가 투수이면 1, 타자이면 2 를 입력해주세요 >> ");
+			posNum = scanner.nextInt();
+			
+			if(posNum == 1) {
+				String position = "투수";
+				int win;
+				int lose;
+				double defence;
+				
+				System.out.print("승리횟수 >> ");
+				win = scanner.nextInt();
+				System.out.print("패배횟수 >> ");
+				lose = scanner.nextInt();
+				System.out.print("방어율 >> ");
+				defence = scanner.nextDouble();
+				
+				humanDTOs[count] = new PitcherDTO(number, name, age, height, position, win, lose, defence);
+				
+			}else if(posNum == 2) {
+				String position = "타자";
+				int batcount;
+				int hit;
+				double hivAvg;
+				
+				System.out.print("타수 >> ");
+				batcount = scanner.nextInt();
+				System.out.print("안타 >> ");
+				hit = scanner.nextInt();
+				System.out.print("타율 >> ");
+				hivAvg = scanner.nextDouble();
+				
+				humanDTOs[count] = new BatterDTO(number, name, age, height, position, batcount, hit, hivAvg);
+				
+			}else {
+				System.out.println("잘못된 번호입니다. 메뉴를 다시 선택해주세요.");
+				return;
+			}
 			
 		}catch (InputMismatchException e) {
 			System.out.println("잘못입력하셨습니다. 메뉴를 다시 선택해주세요.");
 			scanner.next();
 			return;
 		}
-		String name = scanner.next();
-		//중복처리
-		int index = searchName(name, humanDTOs);
-		if(index != -1) {
-			System.out.println(name + "는 이미 존재하는 이름입니다.");
-			return;
-		}
-		
-		System.out.print("이름 >> ");
-		
 		
 	}
 
@@ -85,7 +127,6 @@ public class BaseballDAO implements BaseballDAOImpl{
 
 	@Override
 	public void allData() {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -103,7 +144,7 @@ public class BaseballDAO implements BaseballDAOImpl{
 	
 	//////////////////////////
 	//번호가 같은사람 찾기
-	private int searchName(int number, HumanDTO humanDTOs[]) {
+	private int searchNum(int number, HumanDTO humanDTOs[]) {
 		int index = -1;
 		for (int i = 0; i < humanDTOs.length; i++) {
 			if(humanDTOs[i] != null && number == humanDTOs[i].getNumber()) {

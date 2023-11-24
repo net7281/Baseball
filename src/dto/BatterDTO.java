@@ -5,6 +5,15 @@ public class BatterDTO extends HumanDTO{
 	private int batcount;
 	private int hit;
 	private double hivAvg;
+	
+	public BatterDTO(int number, String name, int age, double height, String position, int batcount, int hit,
+			double hivAvg) {
+		super(number, name, age, height);
+		this.position = position;
+		this.batcount = batcount;
+		this.hit = hit;
+		this.hivAvg = hivAvg;
+	}
 	public String getPosition() {
 		return position;
 	}
@@ -30,5 +39,9 @@ public class BatterDTO extends HumanDTO{
 		this.hivAvg = hivAvg;
 	}
 	
+	@Override
+	public String toString() {
+		return super.toString() + "-" + position + "-" + batcount + "-" + hit + "-" + hivAvg;
+	}
 	
 } 
