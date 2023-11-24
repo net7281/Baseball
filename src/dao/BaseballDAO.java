@@ -6,10 +6,12 @@ import java.util.Scanner;
 import dto.BatterDTO;
 import dto.HumanDTO;
 import dto.PitcherDTO;
+import fileIO.FileIO;
 
 public class BaseballDAO implements BaseballDAOImpl{
 	
 	Scanner scanner = new Scanner(System.in);
+	FileIO fileIO;
 	
 	//학생 데이터 관리 배열
 	private HumanDTO humanDTOs[];
@@ -18,6 +20,8 @@ public class BaseballDAO implements BaseballDAOImpl{
 	private int count;
 	
 	public BaseballDAO() {
+		fileIO = new FileIO("Baseball");
+		fileIO.create();
 		count = 0;
 		humanDTOs = new HumanDTO[10]; //변수만 생성
 	}
@@ -138,14 +142,45 @@ public class BaseballDAO implements BaseballDAOImpl{
 
 	@Override
 	public void save() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void load() {
-		// TODO Auto-generated method stub
+		String strArr[] = fileIO.readFile();
 		
+		humanDTOs = null;
+		
+		if(strArr == null || strArr.length == 0) {
+			count = 0;
+			return;
+		}
+		
+		humanDTOs = new HumanDTO[10];
+		for(int i = 0; i<strArr.length ;i++) {
+			String splitArr[] = strArr[i].split("-");
+			
+			int number = Integer.parseInt(splitArr[0]);
+			String name = splitArr[1];
+			int age = Integer.parseInt(splitArr[2]);
+			double height = Double.parseDouble(splitArr[3]);
+			
+			if(splitArr[4].equals("투수")) {
+				String position = splitArr[4];
+				int win = Integer.parseInt(splitArr[5]);
+				int lose = Integer.parseInt(splitArr[6]);
+				double defence = Double.parseDouble(splitArr[7]);
+				
+				humanDTOs[i] = new PitcherDTO(number, name, age, height, position, win, lose, defence);
+				
+			}else if(splitArr[4].equals("타자")) {
+				String position = splitArr[4];
+				int batcount = Integer.parseInt(splitArr[5]);
+				int hit = Integer.parseInt(splitArr[6]);
+				double hivAvg = Double.parseDouble(splitArr[7]);
+				
+				humanDTOs[i] = new BatterDTO(number, name, age, height, position, batcount, hit, hivAvg);
+			}
+		}
 	}
 	
 	//////////////////////////
